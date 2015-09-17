@@ -1,10 +1,10 @@
-# Virtual Network with two Subnets
+﻿# Virtual Network with two Subnets
 
 <a href="https://portal.azure.com/#create/Microsoft.Template/uri/https://raw.githubusercontent.com/telmosampaio/azure-templates/master/201-IaaS-WebFrontEnd-SQLBackEnd/azuredeploy.json" target="_blank">
     <img src="http://azuredeploy.net/deploybutton.png"/>
 </a>
 
-<a href="http://armviz.io/#/?load=https://raw.githubusercontent.com/telmosampaio/azure-templates/master/201-IaaS-WebFrontEnd-SQLBackEnd/azuredeploy.json" target="_blank">
+<a href="http://armviz.io/#/?load=https%3A%2F%2Fraw.githubusercontent.com%2FAzure%2Fazure-quickstart-templates%2Fmaster%2FACOM-TestVNet-VMs%2Fazuredeploy.json" target="_blank">
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
@@ -25,5 +25,7 @@ Below are the parameters that the template expects.
 | backEndSubnetName | Name for second subnet |
 | webCount | Number of VMs in the front end subnet |
 | sqlCount | Number of VMs in the back end subnet |
+| frontEndNSGName | Name of the NSG used for the front end subnet |
+| backEndNSGName | Name of the NSG used for the back end subnet |
 
 For more information on the scenario built wth this template, visit [this page](https://azure.microsoft.com/documentation/articles/virtual-networks-create-nsg-arm-template)

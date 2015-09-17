@@ -58,6 +58,20 @@
         "description": "CIDR address prefix for the back end subnet."
       }
     },
+    "frontEndNSGName": {
+      "type": "string",
+      "defaultValue": "NSG-BackEnd",
+      "metadata": {
+        "description": "Name for the NSG used to allow remote RDP"
+      }
+    },
+    "backEndNSGName": {
+      "type": "string",
+      "defaultValue": "NSG-FrontEnd",
+      "metadata": {
+        "description": "Name for the NSG used to allow access to web servers on port 80"
+      }
+    },
     "stdStorageName": {
       "type": "string",
       "defaultValue": "testvnetstoragestd",
@@ -72,7 +86,10 @@
         "Standard_LRS",
         "Standard_GRS",
         "Standard_ZRS"
-      ]
+      ],
+      "metadata": {
+        "description": "Storage type."
+      }
     },
     "prmStorageName": {
       "type": "string",
@@ -88,7 +105,10 @@
         "Premium_LRS",
         "Premium_GRS",
         "Premium_ZRS"
-      ]
+      ],
+      "metadata": {
+        "description": "Storage type."
+      }
     }
   },
   "variables": {
@@ -152,11 +172,11 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateBaseUrl'),'VNet.json')]",
+          "uri": "[concat(variables('templateBaseUrl'),'NSG.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parametersLink": {
-          "uri": "[concat(variables('templateBaseUrl'),'VNet-param.json')]",
+          "uri": "[concat(variables('templateBaseUrl'),'NSG-param.json')]",
           "contentVersion": "1.0.0.0"
         }
       }
