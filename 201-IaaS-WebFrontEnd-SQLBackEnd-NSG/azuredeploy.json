@@ -146,7 +146,7 @@
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetName'))]",
     "frontEndSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('frontEndSubnetName'))]",
     "backEndSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('backEndSubnetName'))]",
-    "templateBaseUrl": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-IaaS-WebFrontEnd-SQLBackEnd/"
+    "templateBaseUrl": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/201-IaaS-WebFrontEnd-SQLBackEnd-NSG/"
   },
   "resources": [
     {
@@ -172,11 +172,11 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateBaseUrl'),'NSG.json')]",
+          "uri": "[concat(variables('templateBaseUrl'),'NSGs.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parametersLink": {
-          "uri": "[concat(variables('templateBaseUrl'),'NSG-param.json')]",
+          "uri": "[concat(variables('templateBaseUrl'),'NSGs-param.json')]",
           "contentVersion": "1.0.0.0"
         }
       }

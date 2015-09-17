@@ -126,7 +126,7 @@
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetName'))]",
     "frontEndSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('frontEndSubnetName'))]",
     "backEndSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('backEndSubnetName'))]",
-    "templateBaseUrl": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/201-IaaS-WebFrontEnd-SQLBackEnd/"
+    "templateBaseUrl": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/201-IaaS-WebFrontEnd-SQLBackEnd/"
   },
   "resources": [
     {
