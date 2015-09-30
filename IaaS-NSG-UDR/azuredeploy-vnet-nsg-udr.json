@@ -81,14 +81,14 @@
     },
     "frontEndRouteTableName": {
       "type": "string",
-      "defaultValue": "FERouteTable",
+      "defaultValue": "UDR-FrontEnd",
       "metadata": {
         "description": "Name for front end subnet route table."
       }
     },
     "backEndRouteTableName": {
       "type": "string",
-      "defaultValue": "BERouteTable",
+      "defaultValue": "UDR-BackEnd",
       "metadata": {
         "description": "Name for back end subnet route table."
       }
@@ -235,7 +235,7 @@
       "name": "[parameters('frontEndRouteTableName')]",
       "location": "[resourceGroup().location]",
       "tags": {
-        "displayName": "Route Table - Front End"
+        "displayName": "UDR - FrontEnd"
       },
       "properties": {
         "routes": [
