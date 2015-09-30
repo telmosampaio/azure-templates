@@ -208,11 +208,11 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateBaseUrl'),'vnet-nsg.json')]",
+          "uri": "[concat(variables('templateBaseUrl'),'azuredeploy-vnet-nsg.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parametersLink": {
-          "uri": "[concat(variables('templateBaseUrl'),'vnet-nsg.parameters.json')]",
+          "uri": "[concat(variables('templateBaseUrl'),'azuredeploy-vnet-nsg.parameters.json')]",
           "contentVersion": "1.0.0.0"
         }
       }
