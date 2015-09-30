@@ -130,7 +130,28 @@
       "metadata": {
         "description": "Storage type."
       }
-    }
+    },
+    "vmaIpAddress": {
+      "type": "string",
+      "defaultValue": "192.168.0.4",
+      "metadata": {
+        "description": "IP address for virtual appliance."
+      }
+    },
+    "frontEndRouteTableName": {
+      "type": "string",
+      "defaultValue": "FERouteTable",
+      "metadata": {
+        "description": "Name for front end subnet route table."
+      }
+    },
+    "backEndRouteTableName": {
+      "type": "string",
+      "defaultValue": "BERouteTable",
+      "metadata": {
+        "description": "Name for back end subnet route table."
+      }
+    }  
   },
   "variables": {
     "fwVMSettings": {
@@ -208,11 +229,11 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(variables('templateBaseUrl'),'azuredeploy-vnet-nsg.json')]",
+          "uri": "[concat(variables('templateBaseUrl'),'azuredeploy-vnet-nsg-udr.json')]",
           "contentVersion": "1.0.0.0"
         },
         "parametersLink": {
-          "uri": "[concat(variables('templateBaseUrl'),'azuredeploy-vnet-nsg.parameters.json')]",
+          "uri": "[concat(variables('templateBaseUrl'),'azuredeploy-vnet-nsg-udr.parameters.json')]",
           "contentVersion": "1.0.0.0"
         }
       }
@@ -282,6 +303,7 @@
           {
             "name": "ipconfig1",
             "properties": {
+              "enableIPForwarding": true,
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[concat('192.168.0.',copyindex(4))]",
               "publicIPAddress": {
