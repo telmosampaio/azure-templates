@@ -142,7 +142,7 @@
       "sku": "2012-R2-Datacenter",
       "version": "latest",
       "vmName": "FW",
-      "osdisk": "osdiskfw",
+      "osdisk": "osdiskweb",
       "nicName": "TestNICFw",
       "pipName": "TestPIPFw",
       "avsetName": "fwAvSet"
