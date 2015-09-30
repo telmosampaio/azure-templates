@@ -203,7 +203,7 @@
     "frontEndSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('frontEndSubnetName'))]",
     "backEndSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('backEndSubnetName'))]",
     "dmzSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('dmzSubnetName'))]",
-    "templateBaseUrl": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaS-NSG-UDR-before/"
+    "templateBaseUrl": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaS-NSG-UDR/"
   },
   "resources": [
     {
