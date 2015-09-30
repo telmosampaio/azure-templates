@@ -141,11 +141,11 @@
       "offer": "WindowsServer",
       "sku": "2012-R2-Datacenter",
       "version": "latest",
-      "vmName": "Web",
+      "vmName": "FW",
       "osdisk": "osdiskweb",
-      "nicName": "TestNICDmz",
-      "pipName": "TestPIPDmz",
-      "avsetName": "dmzAvSet"
+      "nicName": "TestNICFw",
+      "pipName": "TestPIPFw",
+      "avsetName": "fwAvSet"
     },
     "webVMSettings": {
       "vmSize": "Standard_A1",
@@ -155,7 +155,7 @@
       "offer": "WindowsServer",
       "sku": "2012-R2-Datacenter",
       "version": "latest",
-      "vmName": "Web",
+      "vmName": "WEB",
       "osdisk": "osdiskweb",
       "nicName": "TestNICWeb",
       "pipName": "TestPIPWeb",
