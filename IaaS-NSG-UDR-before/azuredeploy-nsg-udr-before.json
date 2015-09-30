@@ -143,9 +143,9 @@
       "version": "latest",
       "vmName": "FW",
       "osdisk": "osdiskfw",
-      "nicName": "TestNICFw",
-      "pipName": "TestPIPFw",
-      "avsetName": "fwAvSet"
+      "nicName": "NICFW",
+      "pipName": "PIPFW",
+      "avsetName": "ASFW"
     },
     "webVMSettings": {
       "vmSize": "Standard_A1",
@@ -157,9 +157,9 @@
       "version": "latest",
       "vmName": "WEB",
       "osdisk": "osdiskweb",
-      "nicName": "TestNICWeb",
-      "pipName": "TestPIPWeb",
-      "avsetName": "webAvSet"
+      "nicName": "NICWEB",
+      "pipName": "PIPWEB",
+      "avsetName": "ASWEB"
     },
     "sqlVMSettings": {
       "vmSize": "Standard_DS1",
@@ -172,9 +172,9 @@
       "vmName": "SQL",
       "osdisk": "osdisksql",
       "datadisk": "datadisksql",
-      "nicName": "TestNICSQL",
-      "pipName": "TestPIPSQL",
-      "avsetName": "sqlAvSet"
+      "nicName": "NICSQL",
+      "pipName": "PIPSQL",
+      "avsetName": "ASSQL"
     },
     "location": "[resourceGroup().location]",
     "vmStorageAccountContainerName": "vhds",

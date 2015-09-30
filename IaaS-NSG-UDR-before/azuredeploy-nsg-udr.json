@@ -163,10 +163,10 @@
       "sku": "2012-R2-Datacenter",
       "version": "latest",
       "vmName": "FW",
-      "osdisk": "osdiskweb",
-      "nicName": "TestNICFw",
-      "pipName": "TestPIPFw",
-      "avsetName": "fwAvSet"
+      "osdisk": "osdiskfw",
+      "nicName": "NICFW",
+      "pipName": "PIPFW",
+      "avsetName": "ASFW"
     },
     "webVMSettings": {
       "vmSize": "Standard_A1",
@@ -178,9 +178,9 @@
       "version": "latest",
       "vmName": "WEB",
       "osdisk": "osdiskweb",
-      "nicName": "TestNICWeb",
-      "pipName": "TestPIPWeb",
-      "avsetName": "webAvSet"
+      "nicName": "NICWEB",
+      "pipName": "PIPWEB",
+      "avsetName": "ASWEB"
     },
     "sqlVMSettings": {
       "vmSize": "Standard_DS1",
@@ -193,9 +193,9 @@
       "vmName": "SQL",
       "osdisk": "osdisksql",
       "datadisk": "datadisksql",
-      "nicName": "TestNICSQL",
-      "pipName": "TestPIPSQL",
-      "avsetName": "sqlAvSet"
+      "nicName": "NICSQL",
+      "pipName": "PIPSQL",
+      "avsetName": "ASSQL"
     },
     "location": "[resourceGroup().location]",
     "vmStorageAccountContainerName": "vhds",
