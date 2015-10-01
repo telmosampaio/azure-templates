@@ -1,8 +1,8 @@
 ﻿{
-  "itemDisplayName": "ACOM example with VNet, Storage accounts, and VMs.",
-  "description": "This template shows how to create a VNet with two subnets, two storage accounts, and several front end and backend VMs in the subnets.",
-  "summary": "This template creates a VNet with two subnets, two storage accounts, and multiple VMs in each subnet.",
+  "itemDisplayName": "ACOM example with VNet, Storage accounts, VMs, and NSGs.",
+  "description": "This template shows how to create a VNet with three subnets, two storage accounts, and several front end and backend VMs in the subnets, a DMZ with a virtual appliance, and NSGs.",
+  "summary": "This template creates a VNet with three subnets, two storage accounts, multiple VMs in each subnet, and NSGs.",
   "githubUsername": "telmosampaio",
-  "dateUpdated": "2015-09-15"
+  "dateUpdated": "2015-09-30"
 }
 
