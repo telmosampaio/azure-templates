@@ -1,0 +1,8 @@
+﻿{
+  "itemDisplayName": "ACOM example with VNet, Storage accounts, VMs, NSGs, and UDRs.",
+  "description": "This template shows how to create a VNet with three subnets, two storage accounts, and several front end and backend VMs in the subnets, a DMZ with a virtual appliance using UDR, and NSGs.",
+  "summary": "This template creates a VNet with three subnets, two storage accounts, multiple VMs in each subnet, NSGs, and UDRs.",
+  "githubUsername": "telmosampaio",
+  "dateUpdated": "2015-09-30"
+}
+

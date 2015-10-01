@@ -13,7 +13,7 @@
     "frontEndNSGName": { "value": "NSG-BackEnd" },
     "backEndNSGName": { "value": "NSG-FrontEnd" },
     "vmaIpAddress": { "value": "192.168.0.4" },
-    "frontEndRouteTableName": { "value": "FERouteTable" },
-    "backEndRouteTableName": {"value": "BERouteTable"}
+    "frontEndRouteTableName": { "value": "UDR-FrontEnd" },
+    "backEndRouteTableName": {"value": "UDR-BackEnd"}
   }
 }
