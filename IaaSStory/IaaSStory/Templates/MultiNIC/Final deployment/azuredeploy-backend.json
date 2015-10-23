@@ -1,0 +1,248 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "originalResourceGroup": {
+      "type": "string",
+      "defaultValue": "IaaSStory",
+      "metadata": {
+        "description": "Name of resource group containing VNet and front end objects."
+      }
+    },
+    "dbCount": {
+      "type": "int",
+      "defaultValue": 2,
+      "metadata": {
+        "description": "Number of VMs to be deployed to the back end subnet."
+      }
+    },
+    "vnetName": {
+      "type": "string",
+      "defaultValue": "WTestVNet",
+      "metadata": {
+        "description": "Name for the new VNet."
+      }
+    },
+    "backEndSubnetName": {
+      "type": "string",
+      "defaultValue": "BackEnd",
+      "metadata": {
+        "description": "Name for the back end subnet."
+      }
+    },
+    "stdStorageName": {
+      "type": "string",
+      "defaultValue": "stestvnetstoragestd",
+      "metadata": {
+        "description": "Name for standard storage account."
+      }
+    },
+    "prmStorageName": {
+      "type": "string",
+      "defaultValue": "wtestvnetstorageprm",
+      "metadata": {
+        "description": "Name for premium storage account."
+      }
+    }
+  },
+  "variables": {
+    "dbVMSettings": {
+      "vmSize": "Standard_DS3",
+      "adminUsername": "adminuser",
+      "adminPassword": "adminP@ssw0rd",
+      "publisher": "MicrosoftSQLServer",
+      "offer": "SQL2014SP1-WS2012R2",
+      "sku": "Standard",
+      "version": "latest",
+      "vmName": "DB",
+      "osdisk": "osdiskdb",
+      "datadisk": "datadiskdb",
+      "nicName": "NICDB",
+      "pipName": "PIPDB",
+      "avsetName": "ASDB"
+    },
+    "location": "[resourceGroup().location]",
+    "vmStorageAccountContainerName": "vhds",
+    "vnetID": "[resourceId('IaaSStory','Microsoft.Network/virtualNetworks',parameters('vnetName'))]",
+    "backEndSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('backEndSubnetName'))]"
+  },
+  "resources": [
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[variables('location')]",
+      "tags": {
+        "displayName": "NetworkInterfaces - DB MGMT"
+      },
+      "name": "[concat(variables('dbVMSettings').nicName,'-MGMT', copyindex(1))]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('backEndSubnetRef')]"
+              }
+            }
+          }
+        ]
+      },
+      "copy": {
+        "name": "dbniccount",
+        "count": "[parameters('dbCount')]"
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[variables('location')]",
+      "tags": {
+        "displayName": "NetworkInterfaces - DB REPL"
+      },
+      "name": "[concat(variables('dbVMSettings').nicName, '-REPL', copyindex(1))]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('backEndSubnetRef')]"
+              }
+            }
+          }
+        ]
+      },
+      "copy": {
+        "name": "dbniccount",
+        "count": "[parameters('dbCount')]"
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/networkInterfaces",
+      "location": "[variables('location')]",
+      "tags": {
+        "displayName": "NetworkInterfaces - DB ILB"
+      },
+      "name": "[concat(variables('dbVMSettings').nicName, '-ILB', copyindex(1))]",
+      "properties": {
+        "ipConfigurations": [
+          {
+            "name": "ipconfig1",
+            "properties": {
+              "privateIPAllocationMethod": "Dynamic",
+              "subnet": {
+                "id": "[variables('backEndSubnetRef')]"
+              }
+            }
+          }
+        ]
+      },
+      "copy": {
+        "name": "dbniccount",
+        "count": "[parameters('dbCount')]"
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[variables('dbVMSettings').avsetName]",
+      "location": "[variables('location')]",
+      "tags": {
+        "displayName": "AvailabilitySet - DB"
+      }
+    },
+    {
+      "apiVersion": "2015-06-15",
+      "name": "[concat(variables('dbVMSettings').vmName,copyindex(1))]",
+      "type": "Microsoft.Compute/virtualMachines",
+      "location": "[variables('location')]",
+      "copy": {
+        "name": "dbvmcount",
+        "count": "[parameters('dbCount')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Network/networkInterfaces/', variables('dbVMSettings').nicName,'-MGMT', copyindex(1))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('dbVMSettings').nicName,'-REPL', copyindex(1))]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('dbVMSettings').nicName,'-ILB', copyindex(1))]",
+        "[concat('Microsoft.Compute/availabilitySets/', variables('dbVMSettings').avsetName)]"
+      ],
+      "tags": {
+        "displayName": "VMs - DB"
+      },
+      "properties": {
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('dbVMSettings').avsetName)]"
+        },
+        "hardwareProfile": {
+          "vmSize": "[variables('dbVMSettings').vmSize]"
+        },
+        "osProfile": {
+          "computerName": "[concat(variables('dbVMSettings').vmName,copyindex(1))]",
+          "adminUsername": "[variables('dbVMSettings').adminUsername]",
+          "adminPassword": "[variables('dbVMSettings').adminPassword]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[variables('dbVMSettings').publisher]",
+            "offer": "[variables('dbVMSettings').offer]",
+            "sku": "[variables('dbVMSettings').sku]",
+            "version": "[variables('dbVMSettings').version]"
+          },
+          "osDisk": {
+            "name": "[concat(variables('dbVMSettings').osdisk,copyindex(1))]",
+            "vhd": {
+              "uri": "[concat('http://', parameters('prmStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('dbVMSettings').osdisk, copyindex(1),'.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [
+            {
+              "vhd": {
+                "uri": "[concat('http://', parameters('prmStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('dbVMSettings').datadisk, copyindex(1),'-1','.vhd')]"
+              },
+              "name": "[concat(variables('dbVMSettings').datadisk,copyindex(1),'-data-disk1')]",
+              "diskSizeGB": "127",
+              "createOption": "Empty",
+              "lun": 0
+            },
+            {
+              "vhd": {
+                "uri": "[concat('http://', parameters('prmStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('dbVMSettings').datadisk, copyindex(1),'-2','.vhd')]"
+              },
+              "name": "[concat(variables('dbVMSettings').datadisk,copyindex(1),'-data-disk2')]",
+              "diskSizeGB": "127",
+              "createOption": "Empty",
+              "lun": 1
+            }
+          ]
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('dbVMSettings').nicName,'-MGMT',copyindex(1)))]",
+              "properties": {
+                "primary": "true"
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('dbVMSettings').nicName,'-REPL',copyindex(1)))]",
+              "properties": {
+                "primary": "false"
+              }
+            },
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('dbVMSettings').nicName,'-ILB',copyindex(1)))]",
+              "properties": {
+                "primary": "false"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

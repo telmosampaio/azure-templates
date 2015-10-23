@@ -1,0 +1,46 @@
+﻿{
+  "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "vmName": {
+      "type": "string",
+      "defaultValue": "WEB1",
+      "metadata": {
+        "description": "Name for the VM the extension will be applied to."
+      }
+    }
+  },
+  "variables": {
+    "location": "[resourceGroup().location]",
+    "publisher": "Microsoft.Powershell",
+    "type": "DSC",
+    "typeHandlerVersion": "1.9",
+    "ModulesUrl": "https://github.com/Azure/azure-quickstart-templates/raw/master/dsc-extension-iis-server-windows-vm/ContosoWebsite.ps1.zip",
+    "SasToken": "",
+    "ConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite"
+  },
+  "resources": [
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Compute/virtualMachines/extensions",
+      "name": "[concat(parameters('vmName'),'/1')]",
+      "location": "[variables('location')]",
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('vmName'))]"
+      ],
+      "properties": {
+        "publisher": "[variables('publisher')]",
+        "type": "[variables('type')]",
+        "typeHandlerVersion": "[variables('typeHandlerVersion')]",
+        "settings": {
+          "ModulesUrl": "[variables('ModulesUrl')]",
+          "SasToken": "[variables('SasToken')]",
+          "ConfigurationFunction": "[variables('ConfigurationFunction')]",
+          "Properties": {
+            "MachineName": "[parameters('vmName')]"
+          }
+        }        
+      }
+    }
+  ]
+}
