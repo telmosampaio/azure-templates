@@ -247,6 +247,24 @@
           ]
         }
       }
-    }
+    },
+    {
+      "apiVersion": "2015-01-01", 
+      "type": "Microsoft.Resources/deployments",
+      "name": "webserver",  
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', variables('webVMSetting').vmName)]"
+      ],           
+      "properties": { 
+        "mode": "Incremental", 
+        "templateLink": {
+          "uri": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaSStory/IaaSStory/Templates/04-Custom%20extension/iisaspnet.json",
+          "contentVersion": "1.0.0.0"
+        }, 
+        "parameters": { 
+          "vmName":{"value": "[variables('webVMSetting').vmName]"} 
+        } 
+      } 
+    } 
   ]
 }

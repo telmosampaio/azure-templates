@@ -45,9 +45,11 @@
     <None Include="Templates\02-Single VM - Windows\azuredeploy.parameters.json" />
     <None Include="Templates\03-Static private IP\azuredeploy.json" />
     <None Include="Templates\03-Static private IP\azuredeploy.parameters.json" />
+    <None Include="Templates\04-Custom extension\apache.json" />
     <None Include="Templates\04-Custom extension\apache.sh" />
     <None Include="Templates\04-Custom extension\azuredeploy.json" />
     <None Include="Templates\04-Custom extension\azuredeploy.parameters.json" />
+    <None Include="Templates\04-Custom extension\apache.parameters.json" />
     <None Include="Templates\04-Custom extension\iisaspnet.json" />
     <None Include="Templates\04-Custom extension\iisaspnet.parameters.json" />
     <None Include="Templates\04-Custom extension\iisaspnet.ps1" />

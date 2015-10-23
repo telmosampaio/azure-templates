@@ -12,12 +12,11 @@
   },
   "variables": {
     "location": "[resourceGroup().location]",
-    "publisher": "Microsoft.Powershell",
-    "type": "DSC",
-    "typeHandlerVersion": "1.9",
-    "ModulesUrl": "https://github.com/Azure/azure-quickstart-templates/raw/master/dsc-extension-iis-server-windows-vm/ContosoWebsite.ps1.zip",
-    "SasToken": "",
-    "ConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite"
+    "publisher": "Microsoft.OSTCExtensions",
+    "type": "CustomScriptForLinux",
+    "typeHandlerVersion": "1.29",
+    "fileUri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/apache2-on-ubuntu-vm/install_apache.sh",
+    "commandToExecute": "sh install_apache.sh"
   },
   "resources": [
     {
@@ -30,12 +29,8 @@
         "type": "[variables('type')]",
         "typeHandlerVersion": "[variables('typeHandlerVersion')]",
         "settings": {
-          "ModulesUrl": "[variables('ModulesUrl')]",
-          "SasToken": "[variables('SasToken')]",
-          "ConfigurationFunction": "[variables('ConfigurationFunction')]",
-          "Properties": {
-            "MachineName": "[parameters('vmName')]"
-          }
+          "fileUris": [ "[variables('fileUri')]" ],
+          "commandToExecute": "[variables('commandToExecute')]"
         }        
       }
     }
