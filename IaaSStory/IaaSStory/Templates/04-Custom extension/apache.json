@@ -15,14 +15,14 @@
     "publisher": "Microsoft.OSTCExtensions",
     "type": "CustomScriptForLinux",
     "typeHandlerVersion": "1.29",
-    "fileUri": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/apache2-on-ubuntu-vm/install_apache.sh",
-    "commandToExecute": "sh install_apache.sh"
+    "fileUri": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaSStory/IaaSStory/Templates/04-Custom%20extension/apache.sh",
+    "commandToExecute": "sh apache.sh"
   },
   "resources": [
     {
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('vmName'),'/1')]",
+      "name": "[concat(parameters('vmName'),'/webserver')]",
       "location": "[variables('location')]",
       "properties": {
         "publisher": "[variables('publisher')]",

@@ -53,6 +53,8 @@
     <None Include="Templates\04-Custom extension\iisaspnet.json" />
     <None Include="Templates\04-Custom extension\iisaspnet.parameters.json" />
     <None Include="Templates\04-Custom extension\iisaspnet.ps1" />
+    <None Include="Templates\05-Multiple Instances\azuredeploy.json" />
+    <None Include="Templates\05-Multiple Instances\azuredeploy.parameters.json" />
     <None Include="Templates\MultiNIC\Final deployment\azuredeploy-backend.parameters.json" />
     <None Include="Templates\MultiNIC\Final deployment\azuredeploy-backend.json" />
     <None Include="Templates\MultiNIC\Final deployment\azuredeploy.json" />
