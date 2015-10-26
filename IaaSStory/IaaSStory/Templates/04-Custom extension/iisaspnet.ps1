@@ -1,8 +1,6 @@
 Configuration IISASPNET
 {
-  param ($MachineName)
-
-  Node $MachineName
+  Node localhost
   {
     #Install the IIS Role
     WindowsFeature IIS

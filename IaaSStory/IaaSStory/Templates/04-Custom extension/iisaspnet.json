@@ -17,13 +17,13 @@
     "typeHandlerVersion": "1.9",
     "ModulesUrl": "https://github.com/Azure/azure-quickstart-templates/raw/master/dsc-extension-iis-server-windows-vm/ContosoWebsite.ps1.zip",
     "SasToken": "",
-    "ConfigurationFunction": "ContosoWebsite.ps1\\ContosoWebsite"
+    "ConfigurationFunction": "iisaspnet.ps1\\IISASPNET"
   },
   "resources": [
     {
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('vmName'),'/1')]",
+      "name": "[concat(parameters('vmName'),'/webserver')]",
       "location": "[variables('location')]",
       "properties": {
         "publisher": "[variables('publisher')]",
@@ -32,10 +32,7 @@
         "settings": {
           "ModulesUrl": "[variables('ModulesUrl')]",
           "SasToken": "[variables('SasToken')]",
-          "ConfigurationFunction": "[variables('ConfigurationFunction')]",
-          "Properties": {
-            "MachineName": "[parameters('vmName')]"
-          }
+          "ConfigurationFunction": "[variables('ConfigurationFunction')]"
         }        
       }
     }
