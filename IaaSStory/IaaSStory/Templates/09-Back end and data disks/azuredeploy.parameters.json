@@ -3,12 +3,20 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "vnetName": { "value": "WTestVNet" },
+    "vnetPrefix": { "value": "192.168.0.0/16" },
+    "frontEndSubnetName": { "value": "FrontEnd" },
+    "frontEndSubnetPrefix": { "value": "192.168.1.0/24" },
     "backEndSubnetName": { "value": "BackEnd" },
+    "backEndSubnetPrefix": { "value": "192.168.2.0/24" },
     "stdStorageName": { "value": "wtestvnetstoragestd" },
+    "stdStorageType": { "value": "Standard_LRS" },
     "prmStorageName": { "value": "wtestvnetstorageprm" },
     "prmStorageType": {"value": "Premium_LRS"},
     "osType": { "value": 0 },
+    "webCount": { "value": 2 },
     "dbCount": { "value": 2 },
-    "parentRG": {"value": "IaaSStory"}
+    "dnsNameforLBIP": { "value": "iaasstory" },
+    "lbName": { "value": "WWEBLB" },
+    "lbPIPName": {"value": "PIPLB"}
   }
 }

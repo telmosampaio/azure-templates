@@ -30,6 +30,13 @@
         "description": "Name for the NSG used to allow remote access."
       }
     },
+    "stdStorageName": {
+      "type": "string",
+      "defaultValue": "wtestvnetstoragestd",
+      "metadata": {
+        "description": "Name for simple storage account."
+      }
+    },
     "prmStorageName": {
       "type": "string",
       "defaultValue": "wtestvnetstorageprm",
@@ -62,6 +69,13 @@
       "defaultValue": 2,
       "metadata": {
         "description": "Number of database VMs to be deployed to the backend end subnet."
+      }
+    },
+    "parentRG": {
+      "type": "string",
+      "defaultValue": "IaaSStory",
+      "metadata": {
+        "description": "Name of resource group containing vnet and front end resources."
       }
     }
   },
@@ -106,7 +120,7 @@
     ],
     "location": "[resourceGroup().location]",
     "vmStorageAccountContainerName": "vhds",
-    "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetName'))]",
+    "vnetID": "[resourceId(parameters('parentRG'),'Microsoft.Network/virtualNetworks',parameters('vnetName'))]",
     "backEndSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('backEndSubnetName'))]",
     "dbVMSetting": "[variables('dbVMSettings')[parameters('osType')]]"
   },
@@ -135,9 +149,6 @@
         "name": "dbniccount",
         "count": "[parameters('dbCount')]"
       },
-      "dependsOn": [
-        "[concat('Microsoft.Network/virtualNetworks/', parameters('vnetName'))]"
-      ],
       "properties": {
         "ipConfigurations": [
           {
@@ -165,10 +176,6 @@
         "name": "dbniccount",
         "count": "[parameters('dbCount')]"
       },
-      "dependsOn": [
-        "[concat('Microsoft.Network/virtualNetworks/', parameters('vnetName'))]",
-        "[concat('Microsoft.Network/networkSecurityGroups/', parameters('remoteAccessNSGName'))]"
-      ],
       "properties": {
         "ipConfigurations": [
           {
@@ -205,7 +212,6 @@
         "[concat('Microsoft.Network/networkInterfaces/', variables('dbVMSetting').nicName,'-DA-', copyindex(1))]",
         "[concat('Microsoft.Network/networkInterfaces/', variables('dbVMSetting').nicName,'-RA-', copyindex(1))]",
         "[concat('Microsoft.Compute/availabilitySets/', variables('dbVMSetting').avsetName)]",
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('stdStorageName'))]",
         "[concat('Microsoft.Storage/storageAccounts/', parameters('prmStorageName'))]"
       ],
       "tags": {
