@@ -59,13 +59,6 @@
       "metadata": {
         "description": "Type of OS to use for VMs: 0 - Windows; 1 - Ubuntu."
       }
-    },
-    "webCount": {
-      "type": "int",
-      "defaultValue": 2,
-      "metadata": {
-        "description": "Number of VMs to be deployed to the front end subnet."
-      }
     }
   },
   "variables": {
@@ -78,13 +71,12 @@
         "offer": "WindowsServer",
         "sku": "2012-R2-Datacenter",
         "version": "latest",
-        "vmName": "WEB",
+        "vmName": "WEB1",
         "osdisk": "osdiskweb",
-        "nicName": "NICWEB",
-        "pipName": "PIPWEB",
-        "ipAddress": "192.168.1.",
-        "extensionDeployment": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaSStory/IaaSStory/Templates/04-Custom%20extension/iisaspnet.json",
-        "avsetName": "ASWEB"
+        "nicName": "NICWEB1",
+        "pipName": "PIPWEB1",
+        "ipAddress": "192.168.1.101",
+        "extensionDeployment":"https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaSStory/IaaSStory/Templates/04-Custom%20extension/iisaspnet.json"
       },
       {
         "vmSize": "Standard_A1",
@@ -94,13 +86,12 @@
         "offer": "UbuntuServer",
         "sku": "14.04.2-LTS",
         "version": "latest",
-        "vmName": "WEB",
+        "vmName": "WEB1",
         "osdisk": "osdiskweb",
-        "nicName": "NICWEB",
-        "pipName": "PIPWEB",
-        "ipAddress": "192.168.1.",
-        "extensionDeployment": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaSStory/IaaSStory/Templates/04-Custom%20extension/apache.json",
-        "avsetName": "ASWEB"
+        "nicName": "NICWEB1",
+        "pipName": "PIPWEB1",
+        "ipAddress": "192.168.1.101",
+        "extensionDeployment": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaSStory/IaaSStory/Templates/04-Custom%20extension/apache.json"
       }
     ],
     "location": "[resourceGroup().location]",
@@ -149,33 +140,25 @@
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[concat(variables('webVMSettings').pipName, copyindex(1))]",
+      "name": "[variables('webVMSetting').pipName]",
       "location": "[variables('location')]",
       "properties": {
         "publicIPAllocationMethod": "Dynamic"
       },
       "tags": {
-        "displayName": "PublicIPAddresses - Web"
-      },
-      "copy": {
-        "name": "webpipcount",
-        "count": "[parameters('webCount')]"
+        "displayName": "PublicIPAddress - Web"
       }
     },
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/networkInterfaces",
-      "name": "[concat(variables('webVMSettings').nicName, copyindex(1))]",
+      "name": "[variables('webVMSetting').nicName]",
       "location": "[variables('location')]",
       "tags": {
-        "displayName": "NetworkInterfaces - Web"
-      },
-      "copy": {
-        "name": "webniccount",
-        "count": "[parameters('webCount')]"
+        "displayName": "NetworkInterface - Web"
       },
       "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', variables('webVMSettings').pipName, copyindex(1))]",
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('webVMSetting').pipName)]",
         "[concat('Microsoft.Network/virtualNetworks/', parameters('vnetName'))]"
       ],
       "properties": {
@@ -184,9 +167,9 @@
             "name": "ipconfig1",
             "properties": {
               "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[concat(variables('webVMSetting').ipAddress,copyindex(4))]",
+              "privateIPAddress": "[variables('webVMSetting').ipAddress]",
               "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('webVMSettings').pipName, copyindex(1)))]"
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('webVMSetting').pipName)]"
               },
               "subnet": {
                 "id": "[variables('frontEndSubnetRef')]"
@@ -198,39 +181,22 @@
     },
     {
       "apiVersion": "2015-06-15",
-      "type": "Microsoft.Compute/availabilitySets",
-      "name": "[variables('webVMSettings').avsetName]",
-      "location": "[variables('location')]",
-      "tags": {
-        "displayName": "AvailabilitySet - Web"
-      }
-    },
-    {
-      "apiVersion": "2015-06-15",
       "type": "Microsoft.Compute/virtualMachines",
-      "name": "[concat(variables('webVMSettings').vmName,copyindex(1))]",
+      "name": "[variables('webVMSetting').vmName]",
       "location": "[variables('location')]",
       "dependsOn": [
-        "[concat('Microsoft.Network/networkInterfaces/', variables('webVMSettings').nicName, copyindex(1))]",
-        "[concat('Microsoft.Compute/availabilitySets/', variables('webVMSettings').avsetName)]",
+        "[concat('Microsoft.Network/networkInterfaces/', variables('webVMSetting').nicName)]",
         "[concat('Microsoft.Storage/storageAccounts/', parameters('stdStorageName'))]"
       ],
       "tags": {
-        "displayName": "VMs - Web"
-      },
-      "copy": {
-        "name": "webvmcount",
-        "count": "[parameters('webCount')]"
+        "displayName": "VM - Web"
       },
       "properties": {
-        "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', variables('webVMSettings').avsetName)]"
-        },
         "hardwareProfile": {
           "vmSize": "[variables('webVMSetting').vmSize]"
         },
         "osProfile": {
-          "computerName": "[concat(variables('webVMSettings').vmName,copyindex(1))]",
+          "computerName": "[variables('webVMSetting').vmName]",
           "adminUsername": "[variables('webVMSetting').adminUsername]",
           "adminPassword": "[variables('webVMSetting').adminPassword]"
         },
@@ -242,9 +208,9 @@
             "version": "[variables('webVMSetting').version]"
           },
           "osDisk": {
-            "name": "[concat(variables('webVMSettings').osdisk,copyindex(1))]",
+            "name": "[variables('webVMSetting').osdisk]",
             "vhd": {
-              "uri": "[concat('http://', parameters('stdStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('webVMSettings').osdisk, copyindex(1),'.vhd')]"
+              "uri": "[concat('http://', parameters('stdStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('webVMSetting').osdisk,'.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -253,33 +219,29 @@
         "networkProfile": {
           "networkInterfaces": [
             {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces', concat(variables('webVMSettings').nicName,copyindex(1)))]"
+              "id": "[resourceId('Microsoft.Network/networkInterfaces', variables('webVMSetting').nicName)]"
             }
           ]
         }
       }
     },
     {
-      "apiVersion": "2015-01-01",
+      "apiVersion": "2015-01-01", 
       "type": "Microsoft.Resources/deployments",
-      "name": "webserver",      
-      "copy": {
-        "name": "webvmcount",
-        "count": "[parameters('webCount')]"
-      },
+      "name": "webserver",  
       "dependsOn": [
-        "[concat('Microsoft.Compute/virtualMachines/', variables('webVMSetting').vmName, copyindex(1))]"
-      ],
-      "properties": {
-        "mode": "Incremental",
+        "[concat('Microsoft.Compute/virtualMachines/', variables('webVMSetting').vmName)]"
+      ],           
+      "properties": { 
+        "mode": "Incremental", 
         "templateLink": {
           "uri": "[variables('webVMSetting').extensionDeployment]",
           "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "vmName": { "value": "[concat(variables('webVMSetting').vmName],copyindex(1))" }
-        }
-      }
-    }
+        }, 
+        "parameters": { 
+          "vmName":{"value": "[variables('webVMSetting').vmName]"} 
+        } 
+      } 
+    } 
   ]
 }

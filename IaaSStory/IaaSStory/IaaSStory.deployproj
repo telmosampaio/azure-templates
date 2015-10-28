@@ -26,7 +26,7 @@
   <!-- vertag<:>end -->
   <ItemGroup>
     <Folder Include="Scripts\" />
-    <Folder Include="Tools\" />
+    <Folder Include="Templates\08-DNS\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Deployment.targets">
@@ -55,15 +55,18 @@
     <None Include="Templates\04-Custom extension\iisaspnet.ps1" />
     <None Include="Templates\05-Multiple Instances\azuredeploy.json" />
     <None Include="Templates\05-Multiple Instances\azuredeploy.parameters.json" />
-    <None Include="Templates\MultiNIC\Final deployment\azuredeploy-backend.parameters.json" />
-    <None Include="Templates\MultiNIC\Final deployment\azuredeploy-backend.json" />
-    <None Include="Templates\MultiNIC\Final deployment\azuredeploy.json" />
-    <None Include="Templates\MultiNIC\Final deployment\azuredeploy.parameters.json" />
-    <None Include="Templates\MultiNIC\Initial deployment\azuredeploy-before.json" />
-    <None Include="Templates\MultiNIC\Initial deployment\azuredeploy-before.parameters.json" />
-    <None Include="Templates\MultiNIC\metadata.json" />
-    <None Include="Templates\MultiNIC\README.MD" />
+    <None Include="Templates\06-External VIP (LB)\azuredeploy.json" />
+    <None Include="Templates\06-External VIP (LB)\azuredeploy.parameters.json" />
+    <None Include="Templates\07-External VIP (LB+NAT)\azuredeploy.json" />
+    <None Include="Templates\07-External VIP (LB+NAT)\azuredeploy.parameters.json" />
+    <None Include="Templates\09-Back end and data disks\azuredeploy.json" />
+    <None Include="Templates\09-Back end and data disks\azuredeploy.parameters.json" />
+    <None Include="Templates\10-NSG\azuredeploy.json" />
+    <None Include="Templates\10-NSG\azuredeploy.parameters.json" />
+    <None Include="Templates\11-MultiNIC\azuredeploy.json" />
+    <None Include="Templates\11-MultiNIC\azuredeploy.parameters.json" />
     <None Include="Tools\AzCopy.exe" />
+    <None Include="Tools\json.json" />
     <None Include="Tools\Microsoft.Data.Edm.dll">
       <Visible>False</Visible>
     </None>
