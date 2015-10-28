@@ -63,8 +63,10 @@
     <None Include="Templates\09-Back end and data disks\azuredeploy.parameters.json" />
     <None Include="Templates\10-NSG\azuredeploy.json" />
     <None Include="Templates\10-NSG\azuredeploy.parameters.json" />
+    <None Include="Templates\11-MultiNIC\multinicbackend.parameters.json" />
     <None Include="Templates\11-MultiNIC\azuredeploy.json" />
     <None Include="Templates\11-MultiNIC\azuredeploy.parameters.json" />
+    <None Include="Templates\11-MultiNIC\multinicbackend.json" />
     <None Include="Tools\AzCopy.exe" />
     <None Include="Tools\json.json" />
     <None Include="Tools\Microsoft.Data.Edm.dll">
