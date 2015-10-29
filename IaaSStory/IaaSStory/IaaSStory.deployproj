@@ -64,9 +64,11 @@
     <None Include="Templates\10-NSG\azuredeploy.json" />
     <None Include="Templates\10-NSG\azuredeploy.parameters.json" />
     <None Include="Templates\11-MultiNIC\azuredeploy.parameters.json" />
+    <None Include="Templates\11-MultiNIC\metadata.json" />
     <None Include="Templates\11-MultiNIC\prerequisites.json" />
     <None Include="Templates\11-MultiNIC\prrequisites.parameters.json" />
     <None Include="Templates\11-MultiNIC\azuredeploy.json" />
+    <None Include="Templates\11-MultiNIC\README.md" />
     <None Include="Tools\AzCopy.exe" />
     <None Include="Tools\Microsoft.Data.Edm.dll">
       <Visible>False</Visible>
