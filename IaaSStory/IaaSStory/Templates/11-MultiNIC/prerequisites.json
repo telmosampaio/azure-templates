@@ -212,7 +212,7 @@
               "protocol": "Tcp",
               "sourcePortRange": "*",
               "destinationPortRange": "[variables('dbVMSetting').remotePort]",
-              "sourceAddressPrefix": "Internet",
+              "sourceAddressPrefix": "*",
               "destinationAddressPrefix": "*",
               "access": "Allow",
               "priority": 200,
@@ -220,7 +220,7 @@
             }
           }
         ]
-      },
+      }
     },
     {
       "apiVersion": "2015-06-15",
