@@ -440,8 +440,8 @@
           },
           "osProfile": {
             "computerName": "[concat(variables('webVMSetting').vmName,copyindex(1))]",
-            "adminUsername": "[variables('webVMSetting').adminUsername]",
-            "adminPassword": "[variables('webVMSetting').adminPassword]"
+            "adminUsername": "[parameters('adminUsername')]",
+            "adminPassword": "[parameters('adminPassword')]"
           },
           "storageProfile": {
             "imageReference": {
