@@ -32,7 +32,6 @@
     },
     "stdStorageName": {
       "type": "string",
-      "defaultValue": "wtestvnetstoragestd",
       "metadata": {
         "description": "Name for standard storage account."
       }
@@ -50,23 +49,29 @@
       }
     },
     "osType": {
-      "type": "int",
-      "defaultValue": 0,
+      "type": "string",
+      "defaultValue": "Windows",
       "allowedValues": [
-        0,
-        1
+        "Windows",
+        "Ubuntu"
       ],
       "metadata": {
-        "description": "Type of OS to use for VMs: 0 - Windows; 1 - Ubuntu ."
+        "description": "Type of OS to use for VMs: Windows or Ubuntu ."
       }
+    },
+    "adminUsername": {
+      "type": "string",
+      "metadata": { "description": "Username for local admin account." }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": { "description": "Password for local admin account." }
     }
   },
   "variables": {
-    "webVMSettings": [
-      {
+    "webVMSettings": {
+      "Windows": {
         "vmSize": "Standard_A1",
-        "adminUsername": "adminuser",
-        "adminPassword": "adminP@ssw0rd",
         "publisher": "MicrosoftWindowsServer",
         "offer": "WindowsServer",
         "sku": "2012-R2-Datacenter",
@@ -76,10 +81,8 @@
         "nicName": "NICWEB1",
         "pipName": "PIPWEB1"
       },
-      {
+      "Ubuntu": {
         "vmSize": "Standard_A1",
-        "adminUsername": "adminuser",
-        "adminPassword": "adminP@ssw0rd",
         "publisher": "Canonical",
         "offer": "UbuntuServer",
         "sku": "14.04.2-LTS",
@@ -89,7 +92,7 @@
         "nicName": "NICWEB1",
         "pipName": "PIPWEB1"
       }
-    ],
+    },
     "location": "[resourceGroup().location]",
     "vmStorageAccountContainerName": "vhds",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetName'))]",
@@ -192,8 +195,8 @@
         },
         "osProfile": {
           "computerName": "[variables('webVMSetting').vmName]",
-          "adminUsername": "[variables('webVMSetting').adminUsername]",
-          "adminPassword": "[variables('webVMSetting').adminPassword]"
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
         },
         "storageProfile": {
           "imageReference": {

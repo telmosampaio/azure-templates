@@ -144,7 +144,7 @@
         "name": "[variables('webVMSetting').pipName]",
         "location": "[variables('location')]",
         "properties": {
-          "publicIPAllocationMethod": "Dynamic"
+          "publicIPAllocationMethod": "Static"
         },
         "tags": {
           "displayName": "PublicIPAddress - Web"

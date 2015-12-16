@@ -32,7 +32,6 @@
     },
     "stdStorageName": {
       "type": "string",
-      "defaultValue": "wtestvnetstoragestd",
       "metadata": {
         "description": "Name for standard storage account."
       }
@@ -48,13 +47,19 @@
       "metadata": {
         "description": "Storage type."
       }
+    },
+    "adminUsername": {
+      "type": "string",
+      "metadata": { "description": "Username for local admin account." }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": { "description": "Password for local admin account." }
     }
   },
   "variables": {
     "webVMSettings": {
       "vmSize": "Standard_A1",
-      "adminUsername": "adminuser",
-      "adminPassword": "adminP@ssw0rd",
       "publisher": "Canonical",
       "offer": "UbuntuServer",
       "sku": "14.04.2-LTS",
@@ -165,8 +170,8 @@
         },
         "osProfile": {
           "computerName": "[variables('webVMSettings').vmName]",
-          "adminUsername": "[variables('webVMSettings').adminUsername]",
-          "adminPassword": "[variables('webVMSettings').adminPassword]"
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
         },
         "storageProfile": {
           "imageReference": {

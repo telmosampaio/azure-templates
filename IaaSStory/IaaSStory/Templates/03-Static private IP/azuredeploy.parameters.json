@@ -6,8 +6,10 @@
     "vnetPrefix": { "value": "192.168.0.0/16" },
     "frontEndSubnetName": { "value": "FrontEnd" },
     "frontEndSubnetPrefix": { "value": "192.168.1.0/24" },
-    "stdStorageName": { "value": "wtestvnetstoragestd" },
+    "stdStorageName": { "value": "iaasstorystoragestd" },
     "stdStorageType": {"value": "Standard_LRS"},
-    "osType": {"value": 1}
+    "osType": { "value": "Ubuntu" },
+    "adminUsername": { "value": "adminUser" },
+    "adminPassword": {"value": "adminP@ssw0rd"}
   }
 }
