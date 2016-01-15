@@ -187,7 +187,7 @@
       "location": "[variables('location')]",
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('webVMSetting').nicName)]",
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('stdStorageName'))]"
+        "[concat('Microsoft.Storage/storageAccounts/', variables('stdStorageName'))]"
       ],
       "tags": {
         "displayName": "VM - Web"
@@ -211,7 +211,7 @@
           "osDisk": {
             "name": "[variables('webVMSetting').osdisk]",
             "vhd": {
-              "uri": "[concat('http://', parameters('stdStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('webVMSetting').osdisk,'.vhd')]"
+              "uri": "[concat('http://', variables('stdStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('webVMSetting').osdisk,'.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
