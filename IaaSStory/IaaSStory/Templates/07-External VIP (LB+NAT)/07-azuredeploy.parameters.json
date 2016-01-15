@@ -7,11 +7,13 @@
     "frontEndSubnetName": { "value": "FrontEnd" },
     "frontEndSubnetPrefix": { "value": "192.168.1.0/24" },
     "stdStorageName": { "value": "wtestvnetstoragestd" },
-    "stdStorageType": {"value": "Standard_LRS"},
-    "osType": { "value": 0 },
+    "stdStorageType": { "value": "Standard_LRS" },
+    "osType": { "value": "Windows" },
+    "adminUserName": { "value": "adminUser" },
+    "adminPassword": { "value": "adminP@ssw0rd" },
     "webCount": { "value": 2 },
     "dnsNameforLBIP": { "value": "iaasstory" },
     "lbName": { "value": "WWEBLB" },
-    "lbPIPName": {"value": "PIPLB"}
+    "lbPIPName": { "value": "PIPLB" }
   }
 }

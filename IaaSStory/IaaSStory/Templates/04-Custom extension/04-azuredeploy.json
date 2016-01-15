@@ -59,14 +59,24 @@
       "metadata": {
         "description": "Type of OS to use for VMs: Windows or Ubuntu."
       }
+    },
+    "adminUserName": {
+      "type": "string",
+      "metadata": {
+        "description": "Local admin username."
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Local admin password."
+      }
     }
   },
   "variables": {
     "webVMSettings": {
       "Windows": {
         "vmSize": "Standard_A1",
-        "adminUsername": "adminuser",
-        "adminPassword": "adminP@ssw0rd",
         "publisher": "MicrosoftWindowsServer",
         "offer": "WindowsServer",
         "sku": "2012-R2-Datacenter",
@@ -80,8 +90,6 @@
       },
       "Ubuntu": {
         "vmSize": "Standard_A1",
-        "adminUsername": "adminuser",
-        "adminPassword": "adminP@ssw0rd",
         "publisher": "Canonical",
         "offer": "UbuntuServer",
         "sku": "14.04.2-LTS",
@@ -198,8 +206,8 @@
         },
         "osProfile": {
           "computerName": "[variables('webVMSetting').vmName]",
-          "adminUsername": "[variables('webVMSetting').adminUsername]",
-          "adminPassword": "[variables('webVMSetting').adminPassword]"
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
         },
         "storageProfile": {
           "imageReference": {

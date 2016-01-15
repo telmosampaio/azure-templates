@@ -32,9 +32,9 @@
     },
     "stdStorageNamePrefix": {
       "type": "string",
-      "defaultValue": "wtestvnetstoragestd",
+      "defaultValue": "stdstg",
       "metadata": {
-        "description": "Name for standard storage account."
+        "description": "Name prefix for standard storage account."
       }
     },
     "stdStorageType": {
@@ -87,14 +87,24 @@
       "metadata": {
         "description": "Name for load balancer PIP."
       }
+    },
+    "adminUserName": {
+      "type": "string",
+      "metadata": {
+        "description": "Local admin username."
+      }
+    },
+    "adminPassword": {
+      "type": "securestring",
+      "metadata": {
+        "description": "Local admin password."
+      }
     }
   },
   "variables": {
     "webVMSettings": {
       "Windows": {
         "vmSize": "Standard_A1",
-        "adminUsername": "adminuser",
-        "adminPassword": "adminP@ssw0rd",
         "publisher": "MicrosoftWindowsServer",
         "offer": "WindowsServer",
         "sku": "2012-R2-Datacenter",
@@ -109,8 +119,6 @@
       },
       "Ubuntu": {
         "vmSize": "Standard_A1",
-        "adminUsername": "adminuser",
-        "adminPassword": "adminP@ssw0rd",
         "publisher": "Canonical",
         "offer": "UbuntuServer",
         "sku": "14.04.2-LTS",
@@ -243,7 +251,7 @@
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('webVMSetting').nicName, copyindex(1))]",
         "[concat('Microsoft.Compute/availabilitySets/', variables('webVMSetting').avsetName)]",
-        "[concat('Microsoft.Storage/storageAccounts/', parameters('stdStorageName'))]"
+        "[concat('Microsoft.Storage/storageAccounts/', variables('stdStorageName'))]"
       ],
       "tags": {
         "displayName": "VMs - Web"
@@ -261,8 +269,8 @@
         },
         "osProfile": {
           "computerName": "[concat(variables('webVMSetting').vmName,copyindex(1))]",
-          "adminUsername": "[variables('webVMSetting').adminUsername]",
-          "adminPassword": "[variables('webVMSetting').adminPassword]"
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -274,7 +282,7 @@
           "osDisk": {
             "name": "[concat(variables('webVMSetting').osdisk,copyindex(1))]",
             "vhd": {
-              "uri": "[concat('http://', parameters('stdStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('webVMSetting').osdisk, copyindex(1),'.vhd')]"
+              "uri": "[concat('http://', variables('stdStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('webVMSetting').osdisk, copyindex(1),'.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
