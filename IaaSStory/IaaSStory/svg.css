@@ -1,0 +1,74 @@
+body {
+    font-family:'Segoe UI Light';
+    font-size:1em;
+}
+svg:not(:root) { 
+    overflow: hidden; 
+    left:20px;
+    top:40px;
+    vertical-align:top;
+    position:absolute;
+}
+#label {
+    width:150px;
+    border:1pt solid lightgray;
+    background-color:lightyellow;
+    cursor:pointer;
+}
+#nav {
+    position:absolute;
+    max-height:500px;
+    padding:5px; 
+    font-family:'Consolas';
+    font-size:1em;
+    left:0px;
+    top:40px;
+    border:1pt solid lightgray;
+    background-color:lightyellow;
+    z-index:100;
+    opacity:0.9;
+    overflow-y:auto;
+    max-width:400px;
+}
+#container {
+    position:absolute;
+    left:20px;
+    top:40px;}
+#data {
+    position:absolute;
+    top:40px;
+    left: 800px;
+    width: 400px;
+    height: 600px;
+    border: 1pt solid gray;
+    overflow-y:auto;
+    visibility:hidden;
+}
+.compass {
+    fill: #fff;
+    stroke: #000;
+    stroke-width: 1.5;
+}
+.button {
+    fill: #225EA8;
+    stroke: #0C2C84;
+    stroke-miterlimit: 6;
+    stroke-linecap: round;
+}
+.button:hover {
+    stroke-width: 2;
+}
+.plus-minus {
+    fill: #fff;
+    pointer-events: none;
+}
+
+.hover path{
+    stroke:#26a9e0;
+    stroke-width: 1px;
+}
+
+.click path {
+    stroke:darkblue;
+    stroke-width: 1px;
+}

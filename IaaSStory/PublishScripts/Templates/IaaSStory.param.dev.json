@@ -1,0 +1,29 @@
+{
+  "siteName": {
+    "value": "IaaSStory"
+  },
+  "hostingPlanName": {
+    "value": "appsvcplan1"
+  },
+  "siteLocation": {
+    "value": "West US"
+  },
+  "sku": {
+    "value": "Standard"
+  },
+  "workerSize": {
+    "value": "0"
+  },
+  "siteMode": {
+    "value": "Limited"
+  },
+  "computeMode": {
+    "value": "0"
+  },
+  "subscriptionId": {
+    "value": "628dad04-b5d1-4f10-b3a4-dc61d88cf97c"
+  },
+  "resourceGroup": {
+    "value": "Default-Networking"
+  }
+}

@@ -63,15 +63,13 @@ if ($UploadArtifacts)
     }
 
     if ($StorageAccountResourceGroupName) {
-        Switch-AzureMode AzureResourceManager
-        $StorageAccountKey = (Get-AzureStorageAccountKey -ResourceGroupName $StorageAccountResourceGroupName -Name $StorageAccountName).Key1
+        $StorageAccountKey = (Get-AzureSRmtorageAccountKey -ResourceGroupName $StorageAccountResourceGroupName -Name $StorageAccountName).Key1
     }
     else {
-        Switch-AzureMode AzureServiceManagement
         $StorageAccountKey = (Get-AzureStorageKey -StorageAccountName $StorageAccountName).Primary 
     }
     
-    $StorageAccountContext = New-AzureStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey
+    $StorageAccountContext = New-AzureRmStorageContext -StorageAccountName $StorageAccountName -StorageAccountKey $StorageAccountKey
 
     # Create DSC configuration archive
     if (Test-Path $DSCSourceFolder) {
@@ -95,17 +93,18 @@ if ($UploadArtifacts)
     $ArtifactsLocationSasToken = $OptionalParameters[$ArtifactsLocationSasTokenName]
     if ($ArtifactsLocationSasToken -eq $null) {
        # Create a SAS token for the storage container - this gives temporary read-only access to the container (defaults to 1 hour).
-       $ArtifactsLocationSasToken = New-AzureStorageContainerSASToken -Container $StorageContainerName -Context $StorageAccountContext -Permission r
+       $ArtifactsLocationSasToken = New-AzureRmStorageContainerSASToken -Container $StorageContainerName -Context $StorageAccountContext -Permission r
        $ArtifactsLocationSasToken = ConvertTo-SecureString $ArtifactsLocationSasToken -AsPlainText -Force
        $OptionalParameters[$ArtifactsLocationSasTokenName] = $ArtifactsLocationSasToken
     }
 }
 
 # Create or update the resource group using the specified template file and template parameters file
-Switch-AzureMode AzureResourceManager
-New-AzureResourceGroup -Name $ResourceGroupName `
+
+New-AzureRmResourceGroup -Name $ResourceGroupName `
                        -Location $ResourceGroupLocation `
-                       -TemplateFile $TemplateFile `
+                        -Force -Verbose
+
+New-AzureRmResourceGroupDeployment -ResourceGroupName $ResourceGroupName -TemplateFile $TemplateFile `
                        -TemplateParameterFile $TemplateParametersFile `
                         @OptionalParameters `
-                        -Force -Verbose
