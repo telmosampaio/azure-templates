@@ -15,7 +15,7 @@
     "publisher": "Microsoft.Powershell",
     "type": "DSC",
     "typeHandlerVersion": "2.8",
-    "ModulesUrl": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaSStory/IaaSStory/Templates/04-Custom%20extension/iisaspnet.ps1",
+    "ModulesUrl": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaSStory/IaaSStory/Templates/04-Custom%20extension/iisaspnet.ps1.zip",
     "SasToken": "",
     "ConfigurationFunction": "iisaspnet.ps1\\IISASPNET"
   },

@@ -30,7 +30,7 @@
         "description": "CIDR address prefix for the front end subnet."
       }
     },
-    "stdStorageName": {
+    "stdStorageNamePrefix": {
       "type": "string",
       "defaultValue": "wtestvnetstoragestd",
       "metadata": {
@@ -50,14 +50,14 @@
       }
     },
     "osType": {
-      "type": "int",
-      "defaultValue": 0,
+      "type": "string",
+      "defaultValue": "Windows",
       "allowedValues": [
-        0,
-        1
+        "Windows",
+        "Ubuntu"
       ],
       "metadata": {
-        "description": "Type of OS to use for VMs: 0 - Windows; 1 - Ubuntu."
+        "description": "Type of OS to use for VMs."
       }
     },
     "webCount": {
@@ -69,7 +69,7 @@
     },
     "dnsNameforLBIP": {
       "type": "string",
-      "defaultValue": "iaasstory",
+      "defaultValue": "azureiaasstory",
       "metadata": {
         "description": "Unique DNS name for LB VIP."
       }
@@ -90,8 +90,8 @@
     }
   },
   "variables": {
-    "webVMSettings": [
-      {
+    "webVMSettings": {
+      "Windows": {
         "vmSize": "Standard_A1",
         "adminUsername": "adminuser",
         "adminPassword": "adminP@ssw0rd",
@@ -107,7 +107,7 @@
         "extensionDeployment": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaSStory/IaaSStory/Templates/04-Custom%20extension/iisaspnet.json",
         "avsetName": "ASWEB"
       },
-      {
+      "Ubuntu": {
         "vmSize": "Standard_A1",
         "adminUsername": "adminuser",
         "adminPassword": "adminP@ssw0rd",
@@ -123,7 +123,7 @@
         "extensionDeployment": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaSStory/IaaSStory/Templates/04-Custom%20extension/apache.json",
         "avsetName": "ASWEB"
       }
-    ],
+    },
     "location": "[resourceGroup().location]",
     "vmStorageAccountContainerName": "vhds",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetName'))]",
@@ -132,13 +132,14 @@
     "lbID": "[resourceId('Microsoft.Network/loadBalancers',parameters('lbName'))]",
     "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontend')]",
     "lbPoolID": "[concat(variables('lbID'),'/backendAddressPools/loadBalancerBackend')]",
-    "lbProbeID": "[concat(variables('lbID'),'/probes/tcpProbe')]"
+    "lbProbeID": "[concat(variables('lbID'),'/probes/tcpProbe')]",
+    "stdStorageName": "[replace(replace(tolower(concat(parameters('stdStorageNamePrefix'), uniquestring(resourceGroup().id))), '-',''),'.','')]"
   },
   "resources": [
     {
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[parameters('stdStorageName')]",
+      "name": "[variables('stdStorageName')]",
       "location": "[resourceGroup().location]",
       "tags": {
         "displayName": "Storage Account - Simple"
@@ -288,28 +289,28 @@
         }
       }
     },
-    //{
-    //  "apiVersion": "2015-01-01",
-    //  "type": "Microsoft.Resources/deployments",
-    //  "name": "[concat('webserver', copyindex(1))]",
-    //  "copy": {
-    //    "name": "webvmcount",
-    //    "count": "[parameters('webCount')]"
-    //  },
-    //  "dependsOn": [
-    //    "[concat('Microsoft.Compute/virtualMachines/', variables('webVMSetting').vmName, copyindex(1))]"
-    //  ],
-    //  "properties": {
-    //    "mode": "Incremental",
-    //    "templateLink": {
-    //      "uri": "[variables('webVMSetting').extensionDeployment]",
-    //      "contentVersion": "1.0.0.0"
-    //    },
-    //    "parameters": {
-    //      "vmName": { "value": "[concat(variables('webVMSetting').vmName],copyindex(1))" }
-    //    }
-    //  }
-    //},
+    {
+      "apiVersion": "2015-01-01",
+      "type": "Microsoft.Resources/deployments",
+      "name": "[concat('webserver', copyindex(1))]",
+      "copy": {
+        "name": "webvmcount",
+        "count": "[parameters('webCount')]"
+      },
+      "dependsOn": [
+        "[concat('Microsoft.Compute/virtualMachines/', variables('webVMSetting').vmName, copyindex(1))]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('webVMSetting').extensionDeployment]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[concat(variables('webVMSetting').vmName],copyindex(1))" }
+        }
+      }
+    },
     {
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Network/loadBalancers",
