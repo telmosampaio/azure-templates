@@ -65,10 +65,10 @@
     <None Include="Templates\06-External VIP (LB)\06-azuredeploy.parameters.json" />
     <None Include="Templates\07-External VIP (LB+NAT)\07-azuredeploy.json" />
     <None Include="Templates\07-External VIP (LB+NAT)\07-azuredeploy.parameters.json" />
-    <None Include="Templates\09-Back end and data disks\azuredeploy.json" />
-    <None Include="Templates\09-Back end and data disks\azuredeploy.parameters.json" />
-    <None Include="Templates\10-NSG\azuredeploy.json" />
-    <None Include="Templates\10-NSG\azuredeploy.parameters.json" />
+    <None Include="Templates\09-Back end and data disks\09-azuredeploy.json" />
+    <None Include="Templates\09-Back end and data disks\09-azuredeploy.parameters.json" />
+    <None Include="Templates\10-NSG\10-azuredeploy.json" />
+    <None Include="Templates\10-NSG\10-azuredeploy.parameters.json" />
     <None Include="Templates\11-MultiNIC\azuredeploy.parameters.json" />
     <None Include="Templates\11-MultiNIC\metadata.json" />
     <None Include="Templates\11-MultiNIC\prerequisites.json" />

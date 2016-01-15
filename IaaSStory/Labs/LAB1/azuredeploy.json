@@ -1,0 +1,36 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "resources": [
+  {
+      "apiVersion": "2015-06-15",
+      "type": "Microsoft.Network/virtualNetworks",
+      "name": "TestVNet",
+      "location": "West US",
+      "tags": {
+        "displayName": "VNet"
+      },
+      "properties": {
+        "addressSpace": {
+          "addressPrefixes": [
+            "192.168.0.0/16"
+          ]
+        },
+        "subnets": [
+          {
+            "name": "FrontEnd",
+            "properties": {
+              "addressPrefix": "192.168.1.0/24"
+            }
+          },
+          {
+            "name": "BackEnd",
+            "properties": {
+              "addressPrefix": "192.168.2.0/24"
+            }
+          }          
+        ]
+      }
+    }
+  ]
+}

@@ -30,11 +30,11 @@
         "description": "CIDR address prefix for the front end subnet."
       }
     },
-    "stdStorageNamePrefix": {
+    "stdStorageName": {
       "type": "string",
-      "defaultValue": "stdstg",
+      "defaultValue": "wtestvnetstoragestd",
       "metadata": {
-        "description": "Name prefix for standard storage account."
+        "description": "Name for standard storage account."
       }
     },
     "stdStorageType": {
@@ -50,14 +50,14 @@
       }
     },
     "osType": {
-      "type": "string",
-      "defaultValue": "Windows",
+      "type": "int",
+      "defaultValue": 0,
       "allowedValues": [
-        "Windows",
-        "Ubuntu"
+        0,
+        1
       ],
       "metadata": {
-        "description": "Type of OS to use for VMs."
+        "description": "Type of OS to use for VMs: 0 - Windows; 1 - Ubuntu."
       }
     },
     "webCount": {
@@ -66,45 +66,14 @@
       "metadata": {
         "description": "Number of VMs to be deployed to the front end subnet."
       }
-    },
-    "dnsNameforLBIP": {
-      "type": "string",
-      "defaultValue": "azureiaasstory",
-      "metadata": {
-        "description": "Unique DNS name for LB VIP."
-      }
-    },
-    "lbName": {
-      "type": "string",
-      "defaultValue": "WWEBLB",
-      "metadata": {
-        "description": "Name for public facing load balancer."
-      }
-    },
-    "lbPIPName": {
-      "type": "string",
-      "defaultValue": "PIPLB",
-      "metadata": {
-        "description": "Name for load balancer PIP."
-      }
-    },
-    "adminUserName": {
-      "type": "string",
-      "metadata": {
-        "description": "Local admin username."
-      }
-    },
-    "adminPassword": {
-      "type": "securestring",
-      "metadata": {
-        "description": "Local admin password."
-      }
     }
   },
   "variables": {
-    "webVMSettings": {
-      "Windows": {
+    "webVMSettings": [
+      {
         "vmSize": "Standard_A1",
+        "adminUsername": "adminuser",
+        "adminPassword": "adminP@ssw0rd",
         "publisher": "MicrosoftWindowsServer",
         "offer": "WindowsServer",
         "sku": "2012-R2-Datacenter",
@@ -117,8 +86,10 @@
         "extensionDeployment": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaSStory/IaaSStory/Templates/04-Custom%20extension/iisaspnet.json",
         "avsetName": "ASWEB"
       },
-      "Ubuntu": {
+      {
         "vmSize": "Standard_A1",
+        "adminUsername": "adminuser",
+        "adminPassword": "adminP@ssw0rd",
         "publisher": "Canonical",
         "offer": "UbuntuServer",
         "sku": "14.04.2-LTS",
@@ -131,24 +102,18 @@
         "extensionDeployment": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaSStory/IaaSStory/Templates/04-Custom%20extension/apache.json",
         "avsetName": "ASWEB"
       }
-    },
+    ],
     "location": "[resourceGroup().location]",
     "vmStorageAccountContainerName": "vhds",
     "vnetID": "[resourceId('Microsoft.Network/virtualNetworks',parameters('vnetName'))]",
     "frontEndSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('frontEndSubnetName'))]",
-    "webVMSetting": "[variables('webVMSettings')[parameters('osType')]]",
-    "lbID": "[resourceId('Microsoft.Network/loadBalancers',parameters('lbName'))]",
-    "frontEndIPConfigID": "[concat(variables('lbID'),'/frontendIPConfigurations/loadBalancerFrontend')]",
-    "lbPoolID": "[concat(variables('lbID'),'/backendAddressPools/loadBalancerBackend')]",
-    "lbProbeID": "[concat(variables('lbID'),'/probes/tcpProbe')]",
-    "stdStorageName": "stdtelmorg7"
-    //"stdStorageName": "[replace(replace(tolower(concat(parameters('stdStorageNamePrefix'), uniquestring(resourceGroup().id))), '-',''),'.','')]"
+    "webVMSetting": "[variables('webVMSettings')[parameters('osType')]]"
   },
   "resources": [
     {
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Storage/storageAccounts",
-      "name": "[variables('stdStorageName')]",
+      "name": "[parameters('stdStorageName')]",
       "location": "[resourceGroup().location]",
       "tags": {
         "displayName": "Storage Account - Simple"
@@ -184,13 +149,17 @@
     {
       "apiVersion": "2015-06-15",
       "type": "Microsoft.Network/publicIPAddresses",
-      "name": "[parameters('lbPIPName')]",
+      "name": "[concat(variables('webVMSetting').pipName, copyindex(1))]",
       "location": "[variables('location')]",
       "properties": {
         "publicIPAllocationMethod": "Dynamic"
       },
       "tags": {
-        "displayName": "PublicIPAddress - LB"
+        "displayName": "PublicIPAddresses - Web"
+      },
+      "copy": {
+        "name": "webpipcount",
+        "count": "[parameters('webCount')]"
       }
     },
     {
@@ -206,9 +175,8 @@
         "count": "[parameters('webCount')]"
       },
       "dependsOn": [
-        "[concat('Microsoft.Network/virtualNetworks/', parameters('vnetName'))]",
-        "[concat('Microsoft.Network/loadBalancers/', parameters('lbName'))]",
-        "[concat('Microsoft.Network/loadBalancers/',parameters('lbName'),'/inboundNatRules/', 'RDP-', variables('webVMSetting').vmName, copyIndex(1))]"
+        "[concat('Microsoft.Network/publicIPAddresses/', variables('webVMSetting').pipName, copyindex(1))]",
+        "[concat('Microsoft.Network/virtualNetworks/', parameters('vnetName'))]"
       ],
       "properties": {
         "ipConfigurations": [
@@ -217,19 +185,12 @@
             "properties": {
               "privateIPAllocationMethod": "Static",
               "privateIPAddress": "[concat(variables('webVMSetting').ipAddress,copyindex(4))]",
+              "publicIPAddress": {
+                "id": "[resourceId('Microsoft.Network/publicIPAddresses',concat(variables('webVMSetting').pipName, copyindex(1)))]"
+              },
               "subnet": {
                 "id": "[variables('frontEndSubnetRef')]"
-              },
-              "loadBalancerBackendAddressPools": [
-                {
-                  "id": "[concat(variables('lbID'), '/backendAddressPools/LoadBalancerBackend')]"
-                }
-              ],
-              "loadBalancerInboundNatRules": [                
-                {
-                  "id": "[concat(variables('lbID'), '/inboundNatRules/', 'RDP-', variables('webVMSetting').vmName, copyIndex(1))]"
-                }
-              ]
+              }
             }
           }
         ]
@@ -252,7 +213,7 @@
       "dependsOn": [
         "[concat('Microsoft.Network/networkInterfaces/', variables('webVMSetting').nicName, copyindex(1))]",
         "[concat('Microsoft.Compute/availabilitySets/', variables('webVMSetting').avsetName)]",
-        "[concat('Microsoft.Storage/storageAccounts/', variables('stdStorageName'))]"
+        "[concat('Microsoft.Storage/storageAccounts/', parameters('stdStorageName'))]"
       ],
       "tags": {
         "displayName": "VMs - Web"
@@ -270,8 +231,8 @@
         },
         "osProfile": {
           "computerName": "[concat(variables('webVMSetting').vmName,copyindex(1))]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
+          "adminUsername": "[variables('webVMSetting').adminUsername]",
+          "adminPassword": "[variables('webVMSetting').adminPassword]"
         },
         "storageProfile": {
           "imageReference": {
@@ -283,7 +244,7 @@
           "osDisk": {
             "name": "[concat(variables('webVMSetting').osdisk,copyindex(1))]",
             "vhd": {
-              "uri": "[concat('http://', variables('stdStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('webVMSetting').osdisk, copyindex(1),'.vhd')]"
+              "uri": "[concat('http://', parameters('stdStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('webVMSetting').osdisk, copyindex(1),'.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -301,7 +262,7 @@
     {
       "apiVersion": "2015-01-01",
       "type": "Microsoft.Resources/deployments",
-      "name": "[concat('webserver', copyindex(1))]",
+      "name": "[concat('webserver', copyindex(1))]",      
       "copy": {
         "name": "webvmcount",
         "count": "[parameters('webCount')]"
@@ -316,90 +277,8 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "vmName": { "value": "[concat(variables('webVMSetting').vmName,copyindex(1))]" }
+          "vmName": { "value": "[concat(variables('webVMSetting').vmName],copyindex(1))" }
         }
-      }
-    },
-    {
-      "apiVersion": "2015-05-01-preview",
-      "type": "Microsoft.Network/loadBalancers",
-      "name": "[parameters('lbName')]",
-      "location": "[variables('location')]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/publicIPAddresses/', parameters('lbPIPName'))]"
-      ],
-      "tags": {
-        "displayName": "LB - Public"
-      },
-      "properties": {
-        "frontendIPConfigurations": [
-          {
-            "name": "LoadBalancerFrontend",
-            "properties": {
-              "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('lbPIPName'))]"
-              }
-            }
-          }
-        ],
-        "backendAddressPools": [
-          {
-            "name": "loadBalancerBackend"
-          }
-        ],
-        "loadBalancingRules": [
-          {
-            "name": "LBRule-80",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('frontEndIPConfigID')]"
-              },
-              "backendAddressPool": { "id": "[variables('lbPoolID')]" },
-              "protocol": "tcp",
-              "frontendPort": 80,
-              "backendPort": 80,
-              "enableFloatingIP": false,
-              "idleTimeoutInMinutes": 5,
-              "probe": { "id": "[variables('lbProbeID')]" }
-            }
-          }
-        ],
-        "probes": [
-          {
-            "name": "tcpProbe",
-            "properties": {
-              "protocol": "tcp",
-              "port": 80,
-              "intervalInSeconds": 5,
-              "numberOfProbes": "[parameters('webCount')]"
-            }
-          }
-        ]
-      }
-    },
-    {
-      "apiVersion": "2015-06-15",
-      "type": "Microsoft.Network/loadBalancers/inboundNatRules",
-      "name": "[concat(parameters('lbName'), '/', 'RDP-', variables('webVMSetting').vmName, copyIndex(1))]",
-      "location": "[variables('location')]",
-      "dependsOn": [
-        "[concat('Microsoft.Network/loadBalancers/', parameters('lbName'))]"
-      ],
-      "tags": {
-        "displayName": "LB - NAT Rules"
-      },
-      "copy": {
-        "name": "lbLoopNode",
-        "count": "[parameters('webCount')]"
-      },
-      "properties": {
-        "frontendIPConfiguration": {
-          "id": "[variables('frontEndIPConfigID')]"
-        },
-        "protocol": "tcp",
-        "frontendPort": "[add(50000,copyIndex(1))]",
-        "backendPort": 3389,
-        "enableFloatingIP": false
       }
     }
   ]

@@ -2,17 +2,17 @@
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
-    "vnetName": { "value": "WTestVNet" },
+    "vnetName": { "value": "TestVNet" },
     "vnetPrefix": { "value": "192.168.0.0/16" },
     "frontEndSubnetName": { "value": "FrontEnd" },
     "frontEndSubnetPrefix": { "value": "192.168.1.0/24" },
-    "stdStorageName": { "value": "wtestvnetstoragestd" },
+    "stdStorageNamePrefix": { "value": "stdstg" },
     "stdStorageType": { "value": "Standard_LRS" },
     "osType": { "value": "Windows" },
     "adminUserName": { "value": "adminUser" },
     "adminPassword": { "value": "adminP@ssw0rd" },
     "webCount": { "value": 2 },
-    "dnsNameforLBIP": { "value": "iaasstory" },
+    "dnsNameforLBIP": { "value": "iaasstorytelmo" },
     "lbName": { "value": "WWEBLB" },
     "lbPIPName": { "value": "PIPLB" }
   }
