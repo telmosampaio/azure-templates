@@ -60,14 +60,14 @@
     },
     "frontEndNSGName": {
       "type": "string",
-      "defaultValue": "NSG-BackEnd",
+      "defaultValue": "NSG-FrontEnd",
       "metadata": {
         "description": "Name for the NSG used to allow remote RDP"
       }
     },
     "backEndNSGName": {
       "type": "string",
-      "defaultValue": "NSG-FrontEnd",
+      "defaultValue": "NSG-BackEnd",
       "metadata": {
         "description": "Name for the NSG used to allow access to web servers on port 80"
       }
