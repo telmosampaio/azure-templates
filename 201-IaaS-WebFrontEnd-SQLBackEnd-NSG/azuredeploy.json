@@ -159,9 +159,11 @@
           "uri": "[concat(variables('templateBaseUrl'),'Storage.json')]",
           "contentVersion": "1.0.0.0"
         },
-        "parametersLink": {
-          "uri": "[concat(variables('templateBaseUrl'),'Storage-param.json')]",
-          "contentVersion": "1.0.0.0"
+        "parameters": {
+          "stdStorageName": {"value":"[parameters('stdStorageName')]"},
+          "stdStorageType": {"value":"[parameters('stdStorageType')]"},
+          "prmStorageName": {"value":"[parameters('prmStorageName')]"},
+          "prmStorageType": {"value":"[parameters('prmStorageType')]"}
         }
       }
     },
@@ -175,9 +177,15 @@
           "uri": "[concat(variables('templateBaseUrl'),'NSGs.json')]",
           "contentVersion": "1.0.0.0"
         },
-        "parametersLink": {
-          "uri": "[concat(variables('templateBaseUrl'),'NSGs-param.json')]",
-          "contentVersion": "1.0.0.0"
+        "parameters": {
+          "vnetName": {"value":"[parameters('vnetName')]"},
+          "vnetPrefix": {"value":"[parameters('vnetPrefix')]"},
+          "frontEndSubnetName": {"value":"[parameters('frontEndSubnetName')]"},
+          "frontEndSubnetPrefix": {"value":"[parameters('frontEndSubnetPrefix')]"},
+          "backEndSubnetName": {"value":"[parameters('backEndSubnetName')]"},
+          "backEndSubnetPrefix": {"value":"[parameters('backEndSubnetPrefix')]"},
+          "frontEndNSGName": {"value":"[parameters('frontEndNSGName')]"},
+          "backEndNSGName": {"value":"[parameters('backEndNSGName')]"},          
         }
       }
     },
