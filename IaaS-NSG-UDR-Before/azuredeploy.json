@@ -1,4 +1,4 @@
-﻿{
+{
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
@@ -95,9 +95,9 @@
     },
     "stdStorageName": {
       "type": "string",
-      "defaultValue": "testvnetstoragestd",
+      "maxLength": 10,
       "metadata": {
-        "description": "Name for simple storage account."
+        "description": "Name prefix for simple storage account."
       }
     },
     "stdStorageType": {
@@ -114,9 +114,9 @@
     },
     "prmStorageName": {
       "type": "string",
-      "defaultValue": "testvnetstorageprm",
+      "maxValue": 10,
       "metadata": {
-        "description": "Name for simple storage account."
+        "description": "Name prefix for simple storage account."
       }
     },
     "prmStorageType": {
@@ -130,13 +130,17 @@
       "metadata": {
         "description": "Storage type."
       }
+    },
+    "username": {
+      "type": "string"
+    },
+    "password": {
+      "type": "securestring"
     }
   },
   "variables": {
     "fwVMSettings": {
       "vmSize": "Standard_A1",
-      "adminUsername": "adminuser",
-      "adminPassword": "adminP@ssw0rd",
       "publisher": "MicrosoftWindowsServer",
       "offer": "WindowsServer",
       "sku": "2012-R2-Datacenter",
@@ -149,8 +153,6 @@
     },
     "webVMSettings": {
       "vmSize": "Standard_A1",
-      "adminUsername": "adminuser",
-      "adminPassword": "adminP@ssw0rd",
       "publisher": "MicrosoftWindowsServer",
       "offer": "WindowsServer",
       "sku": "2012-R2-Datacenter",
@@ -163,8 +165,6 @@
     },
     "sqlVMSettings": {
       "vmSize": "Standard_DS1",
-      "adminUsername": "adminuser",
-      "adminPassword": "adminP@ssw0rd",
       "publisher": "MicrosoftSQLServer",
       "offer": "SQL2014SP1-WS2012R2",
       "sku": "Standard",
@@ -195,9 +195,11 @@
           "uri": "[concat(variables('templateBaseUrl'),'azuredeploy-storage.json')]",
           "contentVersion": "1.0.0.0"
         },
-        "parametersLink": {
-          "uri": "[concat(variables('templateBaseUrl'),'azuredeploy-storage.parameters.json')]",
-          "contentVersion": "1.0.0.0"
+        "parameters": {
+          "stdStorageName": { "value": "[parameters('stdStorageName')]" },
+          "stdStorageType": { "value": "[parameters('stdStorageType')]" },
+          "prmStorageName": { "value": "[parameters('prmStorageName')]" },
+          "prmStorageType": { "value": "[parameters('prmStorageType')]" }
         }
       }
     },
@@ -421,8 +423,8 @@
         },
         "osProfile": {
           "computerName": "[concat(variables('fwVMSettings').vmName,copyindex(1))]",
-          "adminUsername": "[variables('fwVMSettings').adminUsername]",
-          "adminPassword": "[variables('fwVMSettings').adminPassword]"
+          "adminUsername": "[parameters('username')]",
+          "adminPassword": "[parameters('password')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -475,8 +477,8 @@
         },
         "osProfile": {
           "computerName": "[concat(variables('webVMSettings').vmName,copyindex(1))]",
-          "adminUsername": "[variables('webVMSettings').adminUsername]",
-          "adminPassword": "[variables('webVMSettings').adminPassword]"
+          "adminUsername": "[parameters('username')]",
+          "adminPassword": "[parameters('password')]"
         },
         "storageProfile": {
           "imageReference": {
@@ -529,8 +531,8 @@
         },
         "osProfile": {
           "computerName": "[concat(variables('sqlVMSettings').vmName,copyindex(1))]",
-          "adminUsername": "[variables('sqlVMSettings').adminUsername]",
-          "adminPassword": "[variables('sqlVMSettings').adminPassword]"
+          "adminUsername": "[parameters('username')]",
+          "adminPassword": "[parameters('password')]"
         },
         "storageProfile": {
           "imageReference": {
