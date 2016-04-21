@@ -1,12 +1,12 @@
-﻿{
+{
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "stdStorageName": {
+      "maxLength": 10,
       "type": "string",
-      "defaultValue": "testvnetstoragestd",
       "metadata": {
-        "description": "Name for simple storage account."
+        "description": "Name prefix for simple storage account."
       }
     },
     "stdStorageType": {
@@ -20,9 +20,9 @@
     },
     "prmStorageName": {
       "type": "string",
-      "defaultValue": "testvnetstorageprm",
+      "maxLength": 10
       "metadata": {
-        "description": "Name for simple storage account."
+        "description": "Name prefix for simple storage account."
       }
     },
     "prmStorageType": {
@@ -35,9 +35,13 @@
       ]
     }
   },
+  "variables": {
+    "stdStgAccountName": "[concat(parameters('stdStorageName'),uniqueString(resourceGroup().Id))]",
+    "prmStgAccountName": "[concat(parameters('prmStorageName'),uniqueString(resourceGroup().Id))]"
+  },
   "resources": [
     {
-      "name": "[parameters('stdStorageName')]",
+      "name": "[variables('stdStgAccountName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-05-01-preview",
@@ -50,7 +54,7 @@
       }
     },
     {
-      "name": "[parameters('prmStorageName')]",
+      "name": "[variables('prmStgAccountName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-05-01-preview",
