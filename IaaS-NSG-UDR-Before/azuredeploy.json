@@ -114,7 +114,6 @@
     },
     "prmStorageName": {
       "type": "string",
-      "maxValue": 10,
       "metadata": {
         "description": "Name prefix for simple storage account."
       }
