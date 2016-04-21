@@ -1,18 +1,18 @@
-﻿{
+{
   "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
     "stdStorageName": {
-      "value": "testvnetstoragestd"
+      "value": "stdstgacct"
     },
     "stdStorageType": {
       "value": "Standard_LRS"
     },
     "prmStorageName": {
-      "value": "testvnetstorageprm"
+      "value": "prmstgacct"
     },
     "prmStorageType": {
-      "value": "Premium_LRS" 
+      "value": "Premium_LRS"
     }
   }
 }
