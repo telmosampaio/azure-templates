@@ -114,6 +114,7 @@
     },
     "prmStorageName": {
       "type": "string",
+      "maxLength": 10,
       "metadata": {
         "description": "Name prefix for simple storage account."
       }
@@ -181,7 +182,9 @@
     "frontEndSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('frontEndSubnetName'))]",
     "backEndSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('backEndSubnetName'))]",
     "dmzSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('dmzSubnetName'))]",
-    "templateBaseUrl": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaS-NSG-UDR-Before/"
+    "templateBaseUrl": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaS-NSG-UDR-Before/",
+    "stdStgAccountName":"[concat(parameters('stdStorageName'),uniqueString(subscription().subscriptionId))]",
+    "prmStgAccountName":"[concat(parameters('prmStorageName'),uniqueString(subscription().subscriptionId))]"
   },
   "resources": [
     {
@@ -195,9 +198,9 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "stdStorageName": { "value": "[parameters('stdStorageName')]" },
+          "stdStorageName": { "value": "[variables('stdStgAccountName')]" },
           "stdStorageType": { "value": "[parameters('stdStorageType')]" },
-          "prmStorageName": { "value": "[parameters('prmStorageName')]" },
+          "prmStorageName": { "value": "[variables('prmStgAccountName')]" },
           "prmStorageType": { "value": "[parameters('prmStorageType')]" }
         }
       }
@@ -224,7 +227,7 @@
       "location": "[variables('location')]",
       "name": "[concat(variables('fwVMSettings').pipName, copyindex(1))]",
       "properties": {
-        "publicIPAllocationMethod": "dynamic"
+        "publicIPAllocationMethod": "Dynamic"
       },
       "tags": {
         "displayName": "PublicIPAddresses - DMZ"
@@ -240,7 +243,7 @@
       "location": "[variables('location')]",
       "name": "[concat(variables('webVMSettings').pipName, copyindex(1))]",
       "properties": {
-        "publicIPAllocationMethod": "dynamic"
+        "publicIPAllocationMethod": "Dynamic"
       },
       "tags": {
         "displayName": "PublicIPAddresses - Web"
@@ -256,7 +259,7 @@
       "location": "[variables('location')]",
       "name": "[concat(variables('sqlVMSettings').pipName, copyindex(1))]",
       "properties": {
-        "publicIPAllocationMethod": "dynamic"
+        "publicIPAllocationMethod": "Dynamic"
       },
       "tags": {
         "displayName": "PublicIPAddresses - SQL"
