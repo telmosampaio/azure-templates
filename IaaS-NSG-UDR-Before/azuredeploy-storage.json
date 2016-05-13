@@ -3,7 +3,6 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "stdStorageName": {
-      "maxLength": 10,
       "type": "string",
       "metadata": {
         "description": "Name prefix for simple storage account."
@@ -20,7 +19,6 @@
     },
     "prmStorageName": {
       "type": "string",
-      "maxLength": 10
       "metadata": {
         "description": "Name prefix for simple storage account."
       }
@@ -35,13 +33,9 @@
       ]
     }
   },
-  "variables": {
-    "stdStgAccountName": "[concat(parameters('stdStorageName'),uniqueString(resourceGroup().Id))]",
-    "prmStgAccountName": "[concat(parameters('prmStorageName'),uniqueString(resourceGroup().Id))]"
-  },
   "resources": [
     {
-      "name": "[variables('stdStgAccountName')]",
+      "name": "[parameters('stdStorageName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-05-01-preview",
@@ -54,7 +48,7 @@
       }
     },
     {
-      "name": "[variables('prmStgAccountName')]",
+      "name": "[parameters('prmStorageName')]",
       "type": "Microsoft.Storage/storageAccounts",
       "location": "[resourceGroup().location]",
       "apiVersion": "2015-05-01-preview",
