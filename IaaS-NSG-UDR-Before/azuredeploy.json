@@ -114,7 +114,6 @@
     },
     "prmStorageName": {
       "type": "string",
-      "maxLength": 10,
       "metadata": {
         "description": "Name prefix for simple storage account."
       }
@@ -183,8 +182,8 @@
     "backEndSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('backEndSubnetName'))]",
     "dmzSubnetRef": "[concat(variables('vnetID'),'/subnets/',parameters('dmzSubnetName'))]",
     "templateBaseUrl": "https://raw.githubusercontent.com/telmosampaio/azure-templates/master/IaaS-NSG-UDR-Before/",
-    "stdStgAccountName":"[concat(parameters('stdStorageName'),uniqueString(subscription().subscriptionId))]",
-    "prmStgAccountName":"[concat(parameters('prmStorageName'),uniqueString(subscription().subscriptionId))]"
+    "stdStgAccountName": "[concat(parameters('stdStorageName'),uniqueString(resourceGroup().id))]",
+    "prmStgAccountName": "[concat(parameters('prmStorageName'),uniqueString(resourceGroup().id))]"
   },
   "resources": [
     {
@@ -438,7 +437,7 @@
           "osDisk": {
             "name": "[concat(variables('fwVMSettings').osdisk,copyindex(1))]",
             "vhd": {
-              "uri": "[concat('http://', parameters('stdStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('fwVMSettings').osdisk, copyindex(1),'.vhd')]"
+              "uri": "[concat('http://', variables('stdStgAccountName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('fwVMSettings').osdisk, copyindex(1),'.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -492,7 +491,7 @@
           "osDisk": {
             "name": "[concat(variables('webVMSettings').osdisk,copyindex(1))]",
             "vhd": {
-              "uri": "[concat('http://', parameters('stdStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('webVMSettings').osdisk, copyindex(1),'.vhd')]"
+              "uri": "[concat('http://', variables('stdStgAccountName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('webVMSettings').osdisk, copyindex(1),'.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -546,7 +545,7 @@
           "osDisk": {
             "name": "[concat(variables('sqlVMSettings').osdisk,copyindex(1))]",
             "vhd": {
-              "uri": "[concat('http://', parameters('prmStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('sqlVMSettings').osdisk, copyindex(1),'.vhd')]"
+              "uri": "[concat('http://', variables('prmStgAccountName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('sqlVMSettings').osdisk, copyindex(1),'.vhd')]"
             },
             "caching": "ReadWrite",
             "createOption": "FromImage"
@@ -554,7 +553,7 @@
           "dataDisks": [
             {
               "vhd": {
-                "uri": "[concat('http://', parameters('prmStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('sqlVMSettings').datadisk, copyindex(1),'-1','.vhd')]"
+                "uri": "[concat('http://', variables('prmStgAccountName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('sqlVMSettings').datadisk, copyindex(1),'-1','.vhd')]"
               },
               "name": "[concat(variables('sqlVMSettings').datadisk,copyindex(1),'-data-disk1')]",
               "diskSizeGB": "127",
@@ -563,7 +562,7 @@
             },
             {
               "vhd": {
-                "uri": "[concat('http://', parameters('prmStorageName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('sqlVMSettings').datadisk, copyindex(1),'-2','.vhd')]"
+                "uri": "[concat('http://', variables('prmStgAccountName'), '.blob.core.windows.net/', variables('vmStorageAccountContainerName'), '/', variables('sqlVMSettings').datadisk, copyindex(1),'-2','.vhd')]"
               },
               "name": "[concat(variables('sqlVMSettings').datadisk,copyindex(1),'-data-disk2')]",
               "diskSizeGB": "127",
