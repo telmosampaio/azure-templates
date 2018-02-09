@@ -8,7 +8,7 @@
     <img src="http://armviz.io/visualizebutton.png"/>
 </a>
 
-This template allows you to create a Virtual Network with three subnets: DMZ, front end, and back end; Windows Server VMs in the DMZ and front end subnets; SQL Server 2014 VMs in the back end subnet; NSGs to secure the front end and back end subnets, and UDRs to forward all internal traffic through a virtual machine in teh DMZ.
+This template allows you to create a Virtual Network with three subnets: DMZ, front end, and back end; Windows Server VMs in the DMZ and front end subnets; SQL Server 2014 VMs in the back end subnet; NSGs to secure the front end and back end subnets, and UDRs to forward all internal traffic through a virtual machine in the DMZ.
 
 Below are the parameters that the template expects.
 
